@@ -1253,8 +1253,8 @@ void neb_forces(std::vector<System> &nsv, System &initial, System &final, std::v
 			t_n = ft_n;
 
 			// look at curvature
-			ediff[0] = ev[l]-ev[l-1];
-			ediff[1] = ev[l+1]-ev[l];
+			ediff[0] = ev[l+1]-ev[l];
+			ediff[1] = ev[l+2]-ev[l+1];
 
 			if(ediff[0]<0.0 and ediff[1]<0.0) { // i.e. both same sign => not at saddle but -ve slope
 				t_n = bt_n;
