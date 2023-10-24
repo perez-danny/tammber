@@ -267,7 +267,7 @@ int singleServe(){
 	//transactionLock.lock();
 	if(incomingTransactions.size()>0) {
 		auto it=incomingTransactions.begin();
-		Transaction &transaction=*it;
+		Transaction transaction=*it;
 
 		//transaction.print();
 
@@ -300,11 +300,10 @@ int singleServe(){
 						nActiveHolds++;
 					}
 				}
-				//update the MRU log
-				mru.touch(std::make_pair(transaction.dbKey,transaction.key));
-
 				//we are done with this transaction
 				incomingTransactions.erase(it);
+				//update the MRU log
+				mru.touch(std::make_pair(transaction.dbKey,transaction.key));
 			}
 			//we don't have the item
 			else{
