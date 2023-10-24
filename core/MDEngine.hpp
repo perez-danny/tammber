@@ -976,11 +976,11 @@ std::function<void(GenericTask&)> carve_impl = [this](GenericTask &task) {
 		if(carve_compute=="NULL") {
 			LOGGER("TADEngine::carve_impl : carve_compute==NULL; assigning center of mass position")
 			insert("Clusters",task.returns,clusters);
-			insert("Position",task.returns,position);
 			thr_N = s.getNAtoms();
 			for(int i=0; i<thr_N;i++) for(int j=0;j<3;j++)
 				position[j] += s.getPosition(i,j)/double(thr_N);
 			thr_N = 0;
+			insert("Position",task.returns,position);
 		} else {
 			centro.clearInputs(); centro.clearOutputs();
 			insert("State",centro.inputData,s);
