@@ -32,7 +32,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules)
 
 # Enable C++ and ensure C++11
 enable_language(CXX)
-set(CMAKE_CXX_STANDARD 11) # C++11...
+set(CMAKE_CXX_STANDARD 17) # C++11...
 set(CMAKE_CXX_STANDARD_REQUIRED ON) #...is required...
 set(CMAKE_CXX_EXTENSIONS ON) #...without compiler extensions like gnu++11
 
@@ -42,9 +42,9 @@ find_package(PythonInterp 2 REQUIRED)
 # Boost: Identify components we need to load from Boost and load them
 if(USE_BOOST_LOG)
 	add_definitions(-DUSE_BOOST_LOG)
-	set(BOOST_COMPONENTS random serialization timer system log log_setup filesystem thread regex chrono atomic date_time program_options)
+	set(BOOST_COMPONENTS random serialization timer system log log_setup filesystem thread regex chrono atomic date_time program_options math_tr1)
 else()
-	set(BOOST_COMPONENTS random serialization timer system filesystem thread regex chrono atomic date_time program_options)
+	set(BOOST_COMPONENTS random serialization timer system filesystem thread regex chrono atomic date_time program_options math_tr1)
 endif(USE_BOOST_LOG)
 
 
