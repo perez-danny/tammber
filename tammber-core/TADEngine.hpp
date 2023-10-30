@@ -80,7 +80,7 @@ TADEngine(boost::property_tree::ptree &config, MPI_Comm localComm_, int seed_) :
  */
 std::function<void(GenericTask&)> segment_impl = [this](GenericTask &task) {
 	std::unordered_map<std::string,std::string> parameters =
-		extractParameters(task.type,task.flavor,BaseMDEngine::defaultFlavor,BaseMDEngine::taskParameters);
+		extractParameters(task.type,task.flavor,this->defaultFlavor,this->taskParameters);
 
 	//read parameters from the tasks
 	double preCorrelationTime=safe_extractor<double>(parameters,"PreCorrelationTime",1.0);
@@ -91,7 +91,7 @@ std::function<void(GenericTask&)> segment_impl = [this](GenericTask &task) {
 
 	int nDephasingTrialsMax=safe_extractor<int>(parameters,"MaximumDephasingTrials",3);
 	bool reportIntermediates=safe_extractor<bool>(parameters,"ReportIntermediates",false);
-	int segmentFlavor=(BaseMDEngine::taskParameters.count(std::make_pair(task.type,task.flavor))>0 ? task.flavor : BaseMDEngine::defaultFlavor);
+	int segmentFlavor=(this->taskParameters.count(std::make_pair(task.type,task.flavor))>0 ? task.flavor : this->defaultFlavor);
 	int maximumSegmentLength = safe_extractor<int>(parameters,"MaximumSegmentLength",25*minimumSegmentLength);
 
 	//create tasks
@@ -512,7 +512,7 @@ std::function<void(GenericTask&)> segment_impl = [this](GenericTask &task) {
  	task.clearOutputs(); // just in case
 
  	std::unordered_map<std::string,std::string> parameters=\
- 		extractParameters(task.type,task.flavor,BaseMDEngine::defaultFlavor,BaseMDEngine::taskParameters);
+ 		extractParameters(task.type,task.flavor,this->defaultFlavor,this->taskParameters);
 
  	//read parameters from the task
  	double dt=safe_extractor<double>(parameters,"NEBTimestep",0.001);
@@ -1145,8 +1145,8 @@ std::function<void(GenericTask&)> init_min_impl = [this](GenericTask &task) {
 	#ifdef ISOMORPHIC
 
 	std::unordered_map<std::string,std::string> parameters =
- 		extractParameters(BaseEngine::mapper.type("TASK_NEB"),task.flavor,
-			BaseMDEngine::defaultFlavor,BaseMDEngine::taskParameters);
+ 		extractParameters(this->mapper.type("TASK_NEB"),task.flavor,
+			this->defaultFlavor,this->taskParameters);
 
 
 	std::map<Label,std::set<PointShiftSymmetry>> self_symmetries;

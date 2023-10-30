@@ -173,9 +173,9 @@ virtual bool failed() {
 	return false;
 };
 
+EngineTaskMapper mapper;
 
 protected:
-EngineTaskMapper mapper;
 int local_rank;
 int local_size;
 MPI_Comm localComm;

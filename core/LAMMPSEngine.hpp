@@ -177,7 +177,7 @@ std::function<void(GenericTask&)> die_impl = [this](GenericTask &task) {
 
 std::function<void(GenericTask&)> md_impl = [this](GenericTask &task) {
 
-std::unordered_map<std::string,std::string> parameters=extractParameters(task.type,task.flavor,MDBaseEngine::defaultFlavor,MDBaseEngine::taskParameters);
+std::unordered_map<std::string,std::string> parameters=extractParameters(task.type,task.flavor,this->defaultFlavor,this->taskParameters);
 
 	LAMMPSSystem s;
 	extract("State",task.inputData,s);
@@ -238,7 +238,7 @@ std::unordered_map<std::string,std::string> parameters=extractParameters(task.ty
 
 std::function<void(GenericTask&)> forces_impl = [this](GenericTask &task) {
 	std::unordered_map<std::string,std::string> parameters =
-		extractParameters(task.type,task.flavor,MDBaseEngine::defaultFlavor,MDBaseEngine::taskParameters);
+		extractParameters(task.type,task.flavor,this->defaultFlavor,this->taskParameters);
 
 	bool reset; if(!extract("Reset",task.arguments,reset)) reset = true;
 
@@ -262,7 +262,7 @@ std::function<void(GenericTask&)> forces_impl = [this](GenericTask &task) {
 
 std::function<void(GenericTask&)> carve_compute_impl = [this](GenericTask &task) {
 	std::unordered_map<std::string,std::string> parameters =
-		extractParameters(task.type,task.flavor,MDBaseEngine::defaultFlavor,MDBaseEngine::taskParameters);
+		extractParameters(task.type,task.flavor,this->defaultFlavor,this->taskParameters);
 		std::string carve_compute;
 		if(!extract("CarveCompute",task.arguments,carve_compute)) carve_compute = "centro";
 
@@ -280,7 +280,7 @@ std::function<void(GenericTask&)> carve_compute_impl = [this](GenericTask &task)
 		task.clearInputs();
 };
 std::function<void(GenericTask&)> init_velocities_impl = [this](GenericTask &task){
-	std::unordered_map<std::string,std::string> parameters=extractParameters(task.type,task.flavor,MDBaseEngine::defaultFlavor,MDBaseEngine::taskParameters);
+	std::unordered_map<std::string,std::string> parameters=extractParameters(task.type,task.flavor,this->defaultFlavor,this->taskParameters);
 
 	LAMMPSSystem s;
 	extract("State",task.inputData,s);
@@ -314,7 +314,7 @@ std::function<void(GenericTask&)> init_velocities_impl = [this](GenericTask &tas
 std::function<void(GenericTask&)> min_impl = [this](GenericTask &task){
 
 	std::unordered_map<std::string,std::string> parameters=\
-		extractParameters(task.type,task.flavor,MDBaseEngine::defaultFlavor,MDBaseEngine::taskParameters);
+		extractParameters(task.type,task.flavor,this->defaultFlavor,this->taskParameters);
 
 	LAMMPSSystem s;
 	extract("State",task.inputData,s);
@@ -355,7 +355,7 @@ std::function<void(GenericTask&)> min_impl = [this](GenericTask &task){
 std::function<void(GenericTask&)> file_init_impl = [this](GenericTask &task){
 
 	std::string filename;
-	std::unordered_map<std::string,std::string> parameters=extractParameters(task.type,task.flavor,MDBaseEngine::defaultFlavor,MDBaseEngine::taskParameters);
+	std::unordered_map<std::string,std::string> parameters=extractParameters(task.type,task.flavor,this->defaultFlavor,this->taskParameters);
 
 
 	if( extract("Filename",task.arguments,filename) ) {
@@ -400,7 +400,7 @@ std::function<void(GenericTask&)> file_init_impl = [this](GenericTask &task){
 
 std::function<void(GenericTask&)> file_write_impl = [this](GenericTask &task) {
 
-	std::unordered_map<std::string,std::string> parameters=extractParameters(task.type,task.flavor,MDBaseEngine::defaultFlavor,MDBaseEngine::taskParameters);
+	std::unordered_map<std::string,std::string> parameters=extractParameters(task.type,task.flavor,this->defaultFlavor,this->taskParameters);
 
 	LAMMPSSystem s;
 	bool gotState=extract("State",task.inputData,s);

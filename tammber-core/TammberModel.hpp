@@ -28,6 +28,7 @@
 
 #include <Eigen/Sparse>
 #include <Eigen/SparseLU>
+#include <cmath>
 
 typedef Eigen::SparseMatrix<double,Eigen::RowMajor> SpMat;
 typedef Eigen::SparseMatrix<double> SpMatCM;
