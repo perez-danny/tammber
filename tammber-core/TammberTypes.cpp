@@ -3,6 +3,8 @@
 // Tammber specific types
 Transition::Transition(){
 	/* do nothing */
+	first=std::pair<Label,Label>(0,0);
+	second=std::pair<Label,Label>(0,0);
 };
 Transition::Transition(LabelPair f,LabelPair s) {
 	first = f;
@@ -207,7 +209,7 @@ TADSegment::TADSegment() {
 	elapsedTime=0.0;
 	initialE=0.0;
 	finalE=0.0;
-	InitialLabels = std::make_pair(0,0);
+	InitialLabels = std::pair<Label,Label>(0,0);
 	transition.first = InitialLabels;
 	transition.second = InitialLabels;
 	initialClusters = 0;
@@ -259,6 +261,17 @@ NEBPathway::NEBPathway() {
 	valid=true;
 	mismatch=false;
 	Ftol=100.0;
+	pairmap=false;
+
+	initialE=0;
+	finalE=0;
+	saddleE=0;
+
+	InitialLabels = std::pair<Label,Label>(0,0);
+	FinalLabels = std::pair<Label,Label>(0,0);
+	SaddleLabels = std::pair<Label,Label>(0,0);
+	MMInitialLabels = std::pair<Label,Label>(0,0);
+	MMFinalLabels = std::pair<Label,Label>(0,0);
 
 };
 

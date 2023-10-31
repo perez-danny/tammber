@@ -51,12 +51,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <boost/functional/hash/hash.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/unordered_map.hpp>
-#include <boost/serialization/unordered_set.hpp>
-#include <boost/serialization/list.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/optional.hpp>
 

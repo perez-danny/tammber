@@ -16,14 +16,6 @@
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/member.hpp>
 
-#include <boost/serialization/vector.hpp>
-#include <boost/serialization/array.hpp>
-#include <boost/serialization/map.hpp>
-
-
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
-
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/stream.hpp>
 #include <boost/iostreams/device/array.hpp>

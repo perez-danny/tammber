@@ -3,7 +3,6 @@
 
 #include "CustomTypedefs.hpp"
 #include "Constants.hpp"
-#include "XYZSystem.hpp"
 #include "LAMMPSSystem.hpp"
 #include "LAMMPSEngine.hpp"
 #include "Task.hpp"
@@ -17,12 +16,7 @@
 #include <streambuf>
 #include <sstream>
 
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/iostreams/device/file.hpp>
-#include <boost/iostreams/stream.hpp>
-#include <boost/iostreams/device/array.hpp>
-#include <boost/iostreams/device/back_inserter.hpp>
+
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/info_parser.hpp>

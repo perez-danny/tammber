@@ -3,7 +3,6 @@
 
 #include "CustomTypedefs.hpp"
 #include "Constants.hpp"
-#include "XYZSystem.hpp"
 #include "LAMMPSSystem.hpp"
 #include "LAMMPSEngine.hpp"
 #include "Task.hpp"

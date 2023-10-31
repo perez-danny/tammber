@@ -51,12 +51,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <boost/functional/hash/hash.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/unordered_map.hpp>
-#include <boost/serialization/unordered_set.hpp>
-#include <boost/serialization/list.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
@@ -70,6 +64,7 @@
 #include "Constants.hpp"
 #include "TammberModel.hpp"
 #include "Log.hpp"
+#include "Pack.hpp"
 
 
 class ModelWrapper {
@@ -102,7 +97,7 @@ ModelWrapper(boost::property_tree::ptree &config) {
 template<class Archive>
 void save(Archive & ar, const unsigned int version) const {
 	// note, version is always the latest when saving
-	long int co=std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now()-start).count()+carryOverTime;
+	unsigned long co=std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now()-start).count()+carryOverTime;
 	ar & jobcount;
 	ar & co;
 	ar & markovModel;

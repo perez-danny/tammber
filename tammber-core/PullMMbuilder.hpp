@@ -32,6 +32,7 @@
 
 #include <mpi.h>
 
+#include <iostream> 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/optional.hpp>
@@ -51,12 +52,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <boost/functional/hash/hash.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/unordered_map.hpp>
-#include <boost/serialization/unordered_set.hpp>
-#include <boost/serialization/list.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/optional.hpp>
 #include <thread>
@@ -102,7 +97,7 @@ AbstractPullWorkProducer(comm_,sharedStore_,children_,config){
 	initialConfigurationString=config.get<std::string>("Configuration.InitialConfigurations");
 	defaultFlavor=config.get<int>("Configuration.TaskParameters.DefaultFlavor", 0);
 	nebonly = config.get<int>("Configuration.MarkovModel.OnlyNEBS",false);
-  deleteVertex = config.get<uint64_t>("Configuration.MarkovModel.DeleteVertex",0);
+  	deleteVertex = config.get<uint64_t>("Configuration.MarkovModel.DeleteVertex",0);
 	//nstd::cout<<"NEBONLY: "<<nebonly<<std::endl;
 
 	// initialConfigurations
@@ -116,7 +111,7 @@ AbstractPullWorkProducer(comm_,sharedStore_,children_,config){
 template<class Archive>
 void save(Archive & ar, const unsigned int version) const {
 	// note, version is always the latest when saving
-	long int co=std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now()-start).count()+carryOverTime;
+	unsigned long co=std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now()-start).count()+carryOverTime;
 	ar & jobcount;
 	ar & co;
 	ar & markovModel;
@@ -150,11 +145,23 @@ void initializeSystems() {
 		if(initialConfiguration.length()==0) continue;
 		TaskDescriptor task;
 		task.type=mapper.type("TASK_INIT_MIN");
-		task.flavor=jobcount++;
+		task.flavor=defaultFlavor;
 		task.optional=false;
 		task.imposeOrdering=false;
 		task.nInstances=1;
-		task.id=jobcount++;
+		task.id=uint64_t(jobcount++);
+
+		//type=-1;
+		//id=0;
+		//flavor=-1;
+		//nInstances=0;
+		//imposeOrdering=false;
+		//optional=false;
+		task.failed=false;
+		task.producer=-1;
+		task.consumer=-1;
+
+		
 		insert("Filename",task.arguments,initialConfiguration);
 		extract("Filename",task.arguments,testfn);
 		LOGGERA("REQUESTING "<<testfn)
@@ -257,6 +264,7 @@ virtual void report_impl(){
 
 virtual void full_print(bool model) {
 	LOGGER("PullMMbuilder::full_print()")
+	#if 0
 	// Save XML file
 	if(deleteVertex!=0) {
 		LOGGERA("PullMMbuilder::full_print DELETING "<<deleteVertex)
@@ -269,6 +277,7 @@ virtual void full_print(bool model) {
 			}
 		}
 	}
+	#endif
 	// Print analysis to screen
 	LOGGERA(markovModel.info_str(true))
 	if(model) markovModel.write_model("MarkovModel.xml");
@@ -279,6 +288,7 @@ virtual void full_print(bool model) {
 };
 
 virtual void checkpoint_impl() {
+	#if 0
 	LOGGER("PullMMbuilder::checkpoint_impl()")
 	//checkpoint at given intervals
 	{
@@ -292,6 +302,7 @@ virtual void checkpoint_impl() {
 			// archive and stream closed when destructors are called
 		}
 	}
+	#endif
 };
 
 
@@ -314,16 +325,17 @@ virtual TaskDescriptorBundle generateTasks(int consumerID, int nTasks){
 	std::list<NEBjob> nebs;
 	markovModel.generateNEBs(nebs,nTasks-batchSize);
 	for(auto neb=nebs.begin(); neb!=nebs.end();) {
-		task.type=mapper.type("TASK_NEB");
+		task.clearInputs();
 
+		task.type=mapper.type("TASK_NEB");
 		task.imposeOrdering=false;
 		task.optional=false;
-
-		task.clearInputs();
 		task.nInstances=1;
 		task.producer=0;
 		task.id=jobcount++;
 		task.flavor=defaultFlavor;
+		task.failed=false;
+		task.consumer=-1;
 
 		NEBPathway pathway;
 		pathway.InitialLabels = neb->TargetTransition.first;
@@ -377,6 +389,9 @@ virtual TaskDescriptorBundle generateTasks(int consumerID, int nTasks){
 		task.producer=0;
 		task.id=jobcount++;
 		task.flavor=defaultFlavor;
+		task.failed=false;
+		task.consumer=-1;
+
 
 		TADSegment segment;
 		segment.InitialLabels = tad->InitialLabels;

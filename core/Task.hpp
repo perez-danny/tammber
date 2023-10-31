@@ -26,13 +26,6 @@
 #include <stdio.h>
 #include <memory>
 
-#include <boost/serialization/vector.hpp>
-#include <boost/serialization/array.hpp>
-#include <boost/serialization/set.hpp>
-#include <boost/serialization/map.hpp>
-#include <boost/serialization/unordered_map.hpp>
-#include <boost/serialization/unordered_set.hpp>
-#include <boost/serialization/utility.hpp>
 #include <boost/bimap.hpp>
 #include <boost/random.hpp>
 #include <boost/random/discrete_distribution.hpp>
@@ -148,14 +141,28 @@ bool optional;
  */
 bool failed;
 
-virtual void clear(){
+AbstractTask(){
 	type=-1;
-	id=-1;
+	id=0;
 	flavor=-1;
 	nInstances=0;
 	imposeOrdering=false;
 	optional=false;
 	failed=false;
+	producer=-1;
+	consumer=-1;
+};
+
+virtual void clear(){
+	type=-1;
+	id=0;
+	flavor=-1;
+	nInstances=0;
+	imposeOrdering=false;
+	optional=false;
+	failed=false;
+	producer=-1;
+	consumer=-1;
 };
 
 template<class Archive>
@@ -186,9 +193,15 @@ template < class StoredDataIn > class TaskT :  public AbstractTask {
 public:
 
 TaskT(){
+	type=-1;
+	id=0;
+	flavor=-1;
+	nInstances=0;
 	imposeOrdering=false;
 	optional=false;
 	failed=false;
+	producer=-1;
+	consumer=-1;
 };
 
 TaskT(AbstractTask &t) : AbstractTask(t) {
@@ -323,6 +336,9 @@ template<> inline bool TaskT<DataPlaceholder>::isRunnable(std::unordered_set<Dat
 typedef TaskT<DataPlaceholder> TaskDescriptor;
 typedef TaskT<StoredDataItem> GenericTask;
 
+BOOST_CLASS_VERSION(TaskDescriptor, 0)
+BOOST_CLASS_VERSION(GenericTask, 0)
+
 
 /**
  * A bundle of task descriptors.
@@ -331,6 +347,7 @@ class TaskDescriptorBundle {
 public:
 
 TaskDescriptorBundle(){
+	producerId=0;
 }
 
 bool empty(){
@@ -417,6 +434,11 @@ std::list<TaskDescriptor> tasks;
 class TaskDescriptorRelay {
 public:
 
+TaskDescriptorRelay(){
+	c=0;
+	p=0;
+	r=0;
+};
 virtual void initialize(int nProducers, int nConsumers){
 	c=nConsumers;
 	p=nProducers;
@@ -506,6 +528,10 @@ TaskResultBundle(){
 	nReservations=0;
 	nPendingReservations=0;
 	queuedStamp=std::chrono::high_resolution_clock::now();
+	workerId=0;
+	nReservations=0;
+	nPendingReservations=0;
+	bundleId=0;
 };
 
 TaskResultBundle(int workerId_,Label bundleId_){
@@ -582,6 +608,9 @@ public:
 
 ResultManager(){
 	currentBundle=0;
+ 	timeout=10000000;
+	maxBundleSize=10000000;
+	id=0;
 }
 
 void setBundleSize(int size){

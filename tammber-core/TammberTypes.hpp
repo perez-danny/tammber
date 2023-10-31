@@ -50,6 +50,8 @@ struct PointShiftSymmetry {
 	std::array<double,NDIM*NDIM> matrix;
 	std::map<int,int> map; // optional
 
+	PointShiftSymmetry();
+
 	// comparitors for std::set, std::map etc
 	bool operator==( const PointShiftSymmetry& other) const {
 		return bool(operation==other.operation);
@@ -58,8 +60,6 @@ struct PointShiftSymmetry {
 	bool operator<( const PointShiftSymmetry& other) const {
 		return bool(operation<other.operation);
 	};
-
-	PointShiftSymmetry();
 
 	/* fill fM matrix which is a cubic symmetry group implementation */
 	void transform_matrix(std::array<double,NDIM*NDIM> &fM, int op);

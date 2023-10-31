@@ -27,8 +27,7 @@
 #include <set>
 #include <algorithm>
 
-#include <boost/serialization/vector.hpp>
-#include <boost/serialization/array.hpp>
+
 
 class LAMMPSSystem : public AbstractSystem {
 public:

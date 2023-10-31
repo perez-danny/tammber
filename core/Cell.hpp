@@ -19,8 +19,6 @@
 #include <Eigen/Dense>
 #include <array>
 
-#include <boost/serialization/vector.hpp>
-#include <boost/serialization/array.hpp>
 #include <iostream>
 
 using Eigen::MatrixXd;

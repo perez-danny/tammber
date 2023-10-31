@@ -19,7 +19,6 @@
 #include "Task.hpp"
 #include "TADEngine.hpp" // BaseEngineType and TaskMapper
 #include "LAMMPSEngine.hpp"
-#include "XYZSystem.hpp"
 #include "KMCEngine.hpp"
 #include "Graph.hpp"
 #include "SystemModifier.hpp"

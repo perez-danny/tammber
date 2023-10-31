@@ -6,12 +6,6 @@
 #include <vector>
 #include <list>
 #include <iostream>
-#include <boost/serialization/vector.hpp>
-#include <boost/serialization/array.hpp>
-#include <boost/serialization/map.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/optional.hpp>
 
 #include "Pack.hpp"
 
@@ -47,6 +41,10 @@ struct AbstractData {
 struct AbstractStoredData : public AbstractData {
 
 	AbstractStoredData(){
+		label=0;
+		canonical_label=0;
+		shared=false;
+		location=0;
 	};
 
 	AbstractStoredData(Label label_, unsigned int location_, bool shared_ ){
@@ -84,6 +82,11 @@ struct AbstractStoredData : public AbstractData {
  */
 struct DataPlaceholder : public AbstractStoredData {
 	DataPlaceholder(){
+		label=0;
+		canonical_label=0;
+		shared=false;
+		location=0;
+		necessity=NECESSITY::OPTIONAL;
 	};
 
 	DataPlaceholder(Label label_, unsigned int location_, bool shared_, NECESSITY necessity_ ){
@@ -168,6 +171,10 @@ struct DataItem : public AbstractData {
 
 struct StoredDataItem : public AbstractStoredData {
 	StoredDataItem(){
+		label=0;
+		canonical_label=0;
+		shared=false;
+		location=0;
 	};
 
 	StoredDataItem(DataPlaceholder &d){

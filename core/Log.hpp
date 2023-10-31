@@ -2,6 +2,9 @@
 #ifndef Log_hpp
 #define Log_hpp
 
+
+#include <iostream> 
+
 #ifdef USE_BOOST_LOG
 	#include <boost/log/core.hpp>
 	#include <boost/log/trivial.hpp>
@@ -16,6 +19,8 @@
 	#include <boost/date_time/posix_time/posix_time.hpp>
 
 	#include <boost/format.hpp>
+
+
 
 	inline void initLog(int rank,int severity){
 

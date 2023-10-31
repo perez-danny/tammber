@@ -19,7 +19,13 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/array.hpp>
 #include <boost/serialization/map.hpp>
+#include <boost/serialization/unordered_map.hpp>
 #include <boost/serialization/list.hpp>
+#include <boost/serialization/set.hpp>
+
+
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/iostreams/device/file.hpp>
@@ -28,6 +34,91 @@
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/serialization/deque.hpp>
 
+
+
+template <typename T1> void pack(std::vector<char> &v, T1 &t1){
+	//v.clear();
+	std::list<char> l;
+	{
+		boost::iostreams::back_insert_device<std::list<char> > sink {l};
+		boost::iostreams::stream<boost::iostreams::back_insert_device<std::list<char> > > os {sink};
+		boost::archive::binary_oarchive oa(os, boost::archive::no_header | boost::archive::no_codecvt);
+		oa << t1;
+		os.flush();
+	}
+
+	std::vector<char> vv{ std::begin(l), std::end(l) };
+	v=vv;
+	//os.close();
+};
+
+template <typename T1, typename T2> void pack(std::vector<char> &v, T1 &t1, T2 &t2){
+	v.clear();
+	//v=std::vector<char>();
+	boost::iostreams::back_insert_device<std::vector<char> > sink {v};
+	boost::iostreams::stream<boost::iostreams::back_insert_device<std::vector<char> > > os {sink};
+	boost::archive::binary_oarchive oa(os, boost::archive::no_header | boost::archive::no_codecvt);
+	oa << t1;
+	oa << t2;
+	os.flush();
+	//os.close();
+};
+
+template <typename T1, typename T2, typename T3> void pack(std::vector<char> &v, T1 &t1, T2 &t2, T3 &t3){
+	v.clear();
+	//v=std::vector<char>();
+	boost::iostreams::back_insert_device<std::vector<char> > sink {v};
+	boost::iostreams::stream<boost::iostreams::back_insert_device<std::vector<char> > > os {sink};
+	boost::archive::binary_oarchive oa(os, boost::archive::no_header | boost::archive::no_codecvt);
+	oa << t1;
+	oa << t2;
+	oa << t3;
+	os.flush();
+	//os.close();
+};
+
+template <typename T1> void unpack(std::vector<char> &v, T1 &t1, std::size_t size=0){
+	t1=T1();
+	if(size<=0) {
+		size=v.size();
+	}
+	boost::iostreams::array_source source {v.data(), size};
+	boost::iostreams::stream<boost::iostreams::array_source> is {source};
+	boost::archive::binary_iarchive ia(is, boost::archive::no_header | boost::archive::no_codecvt);
+	ia >> t1;
+};
+
+template <typename T1, typename T2> void unpack(std::vector<char> &v, T1 &t1, T2 &t2, std::size_t size=0){
+	t1=T1();
+	t2=T2();
+	if(size<=0) {
+		size=v.size();
+	}
+	boost::iostreams::array_source source {v.data(), size};
+	boost::iostreams::stream<boost::iostreams::array_source> is {source};
+	boost::archive::binary_iarchive ia(is, boost::archive::no_header | boost::archive::no_codecvt);
+	ia >> t1;
+	ia >> t2;
+};
+
+template <typename T1, typename T2, typename T3> void unpack(std::vector<char> &v, T1 &t1, T2 &t2, T3 &t3,std::size_t size=0){
+	t1=T1();
+	t2=T2();
+	t3=T3();
+	if(size<=0) {
+		size=v.size();
+	}
+	boost::iostreams::array_source source {v.data(), size};
+	boost::iostreams::stream<boost::iostreams::array_source> is {source};
+	boost::archive::binary_iarchive ia(is,  boost::archive::no_header | boost::archive::no_codecvt);
+	ia >> t1;
+	ia >> t2;
+	ia >> t3;
+};
+
+
+
+#if 0
 
 template <typename T1> void pack(std::vector<char> &v, T1 &t1){
 	v.clear();
@@ -105,5 +196,6 @@ template <typename T1, typename T2, typename T3> void unpack(std::vector<char> &
 };
 
 
+#endif 
 
  #endif
